@@ -16,7 +16,7 @@ class RelativeTime extends PolymerElement {
           display: block;
         }
       </style>
-      <h2>[[output]]!</h2>
+      [[output]]
     `;
   }
   static get properties() {
