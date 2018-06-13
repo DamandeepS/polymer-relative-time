@@ -1,7 +1,7 @@
 import {html, PolymerElement} from '@polymer/polymer/polymer-element.js';
 
 /**
- * `relative-time`
+ * `polymer-relative-time`
  * displays relative time
  *
  * @customElement
@@ -71,4 +71,4 @@ class RelativeTime extends PolymerElement {
   }
 }
 
-window.customElements.define('relative-time', RelativeTime);
+window.customElements.define('polymer-relative-time', RelativeTime);

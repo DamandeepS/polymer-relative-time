@@ -1,4 +1,4 @@
-# \<relative-time\>
+# \<polymer-relative-time\>
 
 displays relative time
 
