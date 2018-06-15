@@ -16,22 +16,24 @@ class PolymerRelativeTime extends PolymerElement {
           display: block;
         }
       </style>
-      [[output]]
+      [[_output]]
     `;
   }
   static get properties() {
     return {
-      output: {
+      _output: {
         type: String,
-        computed: '_computeOutput(timestamp, currentTimestamp)'
+        computed: '_computeOutput(timestamp, _currentTimestamp)',
+        readOnly: true
       },
       timestamp: {
         type: Number,
         observer: '_timestampChanged'
       },
-      currentTimestamp: {
+      _currentTimestamp: {
         type: Number,
-        value: () => (Date.now())
+        value: () => (Date.now()),
+        readOnly: true
       }
     };
   }
@@ -63,7 +65,7 @@ class PolymerRelativeTime extends PolymerElement {
 
   connectedCallback() {
     super.connectedCallback();
-    this.interval = setInterval(() => {this.set('currentTimestamp', Date.now())}, 10000);
+    this.interval = setInterval(() => {this.set('_currentTimestamp', Date.now())}, 10000);
   }
 
   disconnectedCallback() {
@@ -72,7 +74,7 @@ class PolymerRelativeTime extends PolymerElement {
   }
 
   _timestampChanged(o,n) {
-    this.set('currentTimestamp', Date.now());
+    this.set('_currentTimestamp', Date.now());
   }
 }
 
