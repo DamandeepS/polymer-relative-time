@@ -13,7 +13,7 @@ class PolymerRelativeTime extends PolymerElement {
     return html`
       <style>
         :host {
-          display: block;
+          display: inline;
         }
       </style>
       [[_output]]
