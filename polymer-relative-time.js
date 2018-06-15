@@ -28,12 +28,18 @@ class PolymerRelativeTime extends PolymerElement {
       },
       timestamp: {
         type: Number,
+        value: () => (Date.now()),
         observer: '_timestampChanged'
       },
       _currentTimestamp: {
         type: Number,
-        value: () => (Date.now()),
-        readOnly: true
+        value: () => (Date.now())
+      },
+      updateInterval: {
+        type: Number,
+        value: 1,
+        observer: '_updateIntervalChanged'
+
       }
     };
   }
@@ -48,33 +54,61 @@ class PolymerRelativeTime extends PolymerElement {
           week = day*7,
           month = day*30,
           year = day*365;
-      if(absDiff<60)
+
+    switch(true) {
+      case (absDiff<10): 
+        return 'now';
+      case (absDiff<60): 
         return 'few seconds' + suffix;
-      else if(absDiff<3600 && absDiff >60)
-        return Math.floor(absDiff/60) + ' minute(s)' + suffix;
-      else if(absDiff<day&&absDiff>(60*60))
-        return Math.floor(absDiff/3600) + ' hour(s)' + suffix;
-      else if(absDiff<week&&absDiff>day)
-        return Math.floor(absDiff/day) + ' day(s)' + suffix;
-      else if(absDiff<month&&absDiff>week)
-        return Math.floor(absDiff/week) + ' week(s)' + suffix;
-      else if(absDiff<year&&absDiff>month)
-        return Math.floor(absDiff/month) + ' month(s)' + suffix;
-      else return Math.floor(absDiff/year) + ' year(s)' + suffix;
+      case (absDiff<60*60): 
+        if(Math.floor(absDiff/60) == 1)
+          return "a minute" + suffix;
+        return Math.floor(absDiff/60) + ' minutes' + suffix;
+      case (absDiff<day): 
+        if(Math.floor(absDiff/3600) == 1)
+          return "an hour" + suffix;
+        return Math.floor(absDiff/3600) + ' hours' + suffix;
+      case (absDiff<week):
+        if(Math.floor(absDiff/day) == 1)
+          return "a day" + suffix; 
+        return Math.floor(absDiff/day) + ' days' + suffix;
+      case (absDiff<month): 
+        if(Math.floor(absDiff/week) == 1)
+          return "a week" + suffix; 
+        return Math.floor(absDiff/week) + ' weeks' + suffix;
+      case (absDiff<year): 
+        if(Math.floor(absDiff/month) == 1)
+          return "a month" + suffix; 
+        return Math.floor(absDiff/month) + ' months' + suffix;
+      default: 
+        if(Math.floor(absDiff/year) == 1)
+          return "an year" + suffix; 
+        return Math.floor(absDiff/year) + ' years' + suffix;
+    }
   }
 
   connectedCallback() {
     super.connectedCallback();
-    this.interval = setInterval(() => {this.set('_currentTimestamp', Date.now())}, 10000);
+    this.interval = setInterval(() => {this.set('_currentTimestamp', Date.now())}, 1000);
   }
 
   disconnectedCallback() {
     this.disconnectedCallback();
-    clearInterval(this.interval);
+    if(this.interval)
+      clearInterval(this.interval);
   }
 
-  _timestampChanged(o,n) {
+  _timestampChanged(n, o) {
+    this.set('_currentTimestamp', Date.now() +1);  //this hack makes sure the _currentTimestamp is atleast 1ms ahead of given timestamp;
+    this.notifyPath('_currentTimestamp');
+  }
+
+  _updateIntervalChanged(n, o) {
+
     this.set('_currentTimestamp', Date.now());
+    if(this.interval)
+      clearInterval(this.interval);
+    this.interval = setInterval(() => {this.set('_currentTimestamp', Date.now())}, (1000 * n));
   }
 }
 

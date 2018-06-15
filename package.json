@@ -2,7 +2,7 @@
   "name": "polymer-relative-time",
   "description": "displays relative time",
   "main": "polymer-relative-time.js",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "dependencies": {
     "@polymer/polymer": "^3.0.0"
   },
