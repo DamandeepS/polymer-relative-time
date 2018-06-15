@@ -8,7 +8,7 @@ import {html, PolymerElement} from '@polymer/polymer/polymer-element.js';
  * @polymer
  * @demo demo/index.html
  */
-class RelativeTime extends PolymerElement {
+class PolymerRelativeTime extends PolymerElement {
   static get template() {
     return html`
       <style>
@@ -26,7 +26,8 @@ class RelativeTime extends PolymerElement {
         computed: '_computeOutput(timestamp, currentTimestamp)'
       },
       timestamp: {
-        type: Number
+        type: Number,
+        observer: '_timestampChanged'
       },
       currentTimestamp: {
         type: Number,
@@ -67,8 +68,12 @@ class RelativeTime extends PolymerElement {
 
   disconnectedCallback() {
     this.disconnectedCallback();
-    clearInterval(this.interval)
+    clearInterval(this.interval);
+  }
+
+  _timestampChanged(o,n) {
+    this.set('currentTimestamp', Date.now());
   }
 }
 
-window.customElements.define('polymer-relative-time', RelativeTime);
+window.customElements.define('polymer-relative-time', PolymerRelativeTime);
